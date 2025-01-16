@@ -1,38 +1,34 @@
-'use client'
+import Link from 'next/link'
+import { DotsBackground } from '@/components/dots-background'
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import MainContent from './components/layout/MainContent'
-import FriendsList from './components/layout/FriendsList'
-import ServerBar from './components/layout/ServerBar'
-import UserStatus from './components/layout/UserStatus'
-import WelcomeModal from '@/components/WelcomeModal'
-import { useAppContext } from './contexts/AppContext'
-
-export default function Home() {
-  const [showWelcomeModal, setShowWelcomeModal] = useState(true)
-  const { isAuthenticated, user } = useAppContext()
-  const router = useRouter()
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/login')
-    }
-  }, [isAuthenticated, router])
-
-  if (!isAuthenticated || !user) {
-    return null // O podrías mostrar un componente de carga aquí
-  }
-
+export default function WelcomePage() {
   return (
-    <main className="flex h-screen overflow-hidden">
-      <div className="flex flex-col">
-        <FriendsList />
-        <UserStatus career={user.career || "programming"} />
+    <main className="min-h-screen flex items-center justify-center p-4">
+      <DotsBackground />
+      
+      <div className="w-full max-w-md space-y-8">
+        <div className="space-y-6">
+          <h2 className="text-green-500 text-2xl font-medium">Connect-Mi</h2>
+          <h1 className="text-4xl font-semibold text-green-500 dark:text-green-400">
+            Easiest way to be Connected
+          </h1>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          <Link
+            href="/login"
+            className="text-center py-3 px-6 border-2 border-green-500 text-green-500 rounded-lg hover:bg-green-500 hover:text-white transition-colors"
+          >
+            Sign In
+          </Link>
+          <Link
+            href="/register"
+            className="text-center py-3 px-6 border-2 border-green-500 text-green-500 rounded-lg hover:bg-green-500 hover:text-white transition-colors"
+          >
+            Register
+          </Link>
+        </div>
       </div>
-      <MainContent />
-      <ServerBar />
-      {showWelcomeModal && <WelcomeModal onClose={() => setShowWelcomeModal(false)} />}
     </main>
   )
 }
