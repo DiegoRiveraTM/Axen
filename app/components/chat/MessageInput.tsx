@@ -20,6 +20,7 @@ export default function MessageInput({ onSendMessage, replyingTo, onCancelReply 
   const [message, setMessage] = useState('')
   const [showEmojis, setShowEmojis] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
+  const dropZoneRef = useRef<HTMLElement | null>(null)
 
   useEffect(() => {
     const handlePaste = (e: ClipboardEvent) => {
@@ -43,7 +44,7 @@ export default function MessageInput({ onSendMessage, replyingTo, onCancelReply 
       //Removed drag handling
     }
 
-    const dropZone = null//dropZoneRef.current
+    const dropZone = dropZoneRef.current
     if (dropZone) {
       dropZone.addEventListener('dragover', handleDragOver)
       dropZone.addEventListener('dragleave', handleDragLeave)
@@ -146,4 +147,3 @@ export default function MessageInput({ onSendMessage, replyingTo, onCancelReply 
     </form>
   )
 }
-

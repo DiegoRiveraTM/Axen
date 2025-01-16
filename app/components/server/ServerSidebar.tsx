@@ -11,12 +11,28 @@ interface Channel {
 }
 
 interface ServerSidebarProps {
-  serverName: string
-  serverImage: string
-  channels: Channel[]
+  serverName: string;
+  serverImage: string;
+  channels: Channel[];
+  currentUserId: string;
+  serverId: string;
+  onCreateChannel: (channelName: string, channelType: 'text' | 'voice', category?: string) => void;
+  onDeleteChannel: (channelId: string) => void;
+  onUpdateChannel: (channelId: string, updates: Partial<Channel>) => void;
+  onOpenSettings: () => void;  // Agrega esta propiedad
 }
 
-export default function ServerSidebar({ serverName, serverImage, channels }: ServerSidebarProps) {
+export default function ServerSidebar({
+  serverName,
+  serverImage,
+  channels,
+  currentUserId,
+  serverId,
+  onCreateChannel,
+  onDeleteChannel,
+  onUpdateChannel,
+  onOpenSettings  // Agrega esta propiedad
+}: ServerSidebarProps) {
   const [isOpen, setIsOpen] = useState(true)
 
   return (
@@ -43,13 +59,17 @@ export default function ServerSidebar({ serverName, serverImage, channels }: Ser
           serverName={serverName}
           serverImage={serverImage}
           channels={channels}
+          currentUserId={currentUserId}
+          serverId={serverId}
+          onCreateChannel={onCreateChannel}
+          onDeleteChannel={onDeleteChannel}
+          onUpdateChannel={onUpdateChannel}
           onChannelSelect={(channel) => {
-            // Aquí puedes manejar la selección del canal si es necesario
             console.log('Canal seleccionado:', channel);
           }}
+          onOpenSettings={onOpenSettings}  // Pasa la propiedad onOpenSettings
         />
       </div>
     </div>
   )
 }
-

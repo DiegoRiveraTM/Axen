@@ -7,11 +7,10 @@ import RolesView from './RolesView'
 import MembersView from './MembersView'
 import ChannelsView from './ChannelsView'
 import BansView from './BansView'
-import type { Role } from '@/lib/mockData'
-import type { Channel } from '@/lib/mockData';
-import { useRouter } from 'next/navigation';
+import type { Role, Channel, Member } from '@/lib/mockData'
+import { useRouter } from 'next/navigation'
 import DeleteServerModal from '../modals/DeleteServerModal'
-import { hasPermission } from '@/lib/mockData';
+import { hasPermission } from '@/lib/mockData'
 
 interface ServerSettingsProps {
   onClose: () => void;
@@ -21,8 +20,9 @@ interface ServerSettingsProps {
     banner: string;
     message?: string;
     channels: Channel[];
-    roles: Role[]; // Updated server prop type to include roles
-    id: string; // Added server ID
+    roles: Role[];
+    id: string;
+    members: Member[];  // Asegúrate de incluir esta propiedad
   };
   onUpdateServer?: (updatedServer: {
     name: string;
@@ -30,12 +30,12 @@ interface ServerSettingsProps {
     banner: string;
     message?: string;
   }) => void;
-  onCreateChannel?: (channelName: string, channelType: 'voice' | 'text', category: string) => void;
+  onCreateChannel?: (channel: Omit<Channel, 'id'>) => void;
   currentUserId: string;
 }
 
 export default function ServerSettings({ onClose, server, onUpdateServer, onCreateChannel, currentUserId }: ServerSettingsProps) {
-  const router = useRouter();
+  const router = useRouter()
   const [mounted, setMounted] = useState(false)
   const [activeTab, setActiveTab] = useState('overview')
   const [serverName, setServerName] = useState(server.name)
@@ -44,7 +44,7 @@ export default function ServerSettings({ onClose, server, onUpdateServer, onCrea
   const [serverMessage, setServerMessage] = useState(server.message || '')
   const [isEditingName, setIsEditingName] = useState(false)
   const [isEditingMessage, setIsEditingMessage] = useState(false)
-  const [roles, setRoles] = useState<Role[]>(server.roles || []); // Added roles state
+  const [roles, setRoles] = useState<Role[]>(server.roles || [])
   const [showDeleteModal, setShowDeleteModal] = useState(false)
 
   useEffect(() => {
@@ -61,10 +61,10 @@ export default function ServerSettings({ onClose, server, onUpdateServer, onCrea
         icon: serverIcon,
         banner: serverBanner,
         message: serverMessage,
-      };
-      onUpdateServer(updatedServer);
+      }
+      onUpdateServer(updatedServer)
     }
-    onClose();
+    onClose()
   }
 
   const handleDeleteServer = async () => {
@@ -72,7 +72,7 @@ export default function ServerSettings({ onClose, server, onUpdateServer, onCrea
     router.push('/')
   }
 
-  const canDeleteServer = hasPermission({ id: currentUserId, roles: ['1'] }, 'MANAGE_ROLES', server.id);
+  const canDeleteServer = hasPermission({ id: currentUserId, roles: ['1'], name: '', imageUrl: '', isOnline: false, role: 'Admin' }, 'MANAGE_ROLES', server.id)
 
   const renderContent = () => {
     switch (activeTab) {
@@ -81,15 +81,15 @@ export default function ServerSettings({ onClose, server, onUpdateServer, onCrea
           <RolesView
             roles={roles}
             onCreateRole={(newRole) => {
-              setRoles(prevRoles => [...prevRoles, { ...newRole, id: Date.now().toString() }]);
+              setRoles(prevRoles => [...prevRoles, { ...newRole, id: Date.now().toString() }])
             }}
             onUpdateRole={(roleId, updates) => {
               setRoles(prevRoles => prevRoles.map(role => 
                 role.id === roleId ? { ...role, ...updates } : role
-              ));
+              ))
             }}
             onDeleteRole={(roleId) => {
-              setRoles(prevRoles => prevRoles.filter(role => role.id !== roleId));
+              setRoles(prevRoles => prevRoles.filter(role => role.id !== roleId))
             }}
           />
         )
@@ -99,20 +99,17 @@ export default function ServerSettings({ onClose, server, onUpdateServer, onCrea
         return <ChannelsView 
           channels={server.channels} 
           onDeleteChannel={(channelId) => {
-            // Aquí puedes manejar la eliminación del canal
-            console.log('Delete channel:', channelId);
+            console.log('Delete channel:', channelId)
           }}
           onUpdateChannel={(channelId, updates) => {
-            // Aquí puedes manejar la actualización del canal
-            console.log('Update channel:', channelId, updates);
+            console.log('Update channel:', channelId, updates)
           }}
           onCreateChannel={onCreateChannel}
         />
       case 'bans':
         return <BansView 
           onUnbanUser={(userId) => {
-            console.log('Unbanning user:', userId);
-            // Here you would implement the actual unban logic
+            console.log('Unbanning user:', userId)
           }}
         />
       case 'overview':

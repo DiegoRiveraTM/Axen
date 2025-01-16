@@ -54,7 +54,7 @@ export default function ChannelsView({
     if (onCreateChannel) {
       const newChannel = {
         name: 'new-channel',
-        type: 'text',
+        type: 'text' as 'text',  // Asegúrate de que el tipo sea correcto
         category: 'TEXT CHANNELS'
       }
       onCreateChannel(newChannel)
@@ -168,4 +168,3 @@ export default function ChannelsView({
     </ScrollArea>
   )
 }
-

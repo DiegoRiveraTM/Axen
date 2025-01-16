@@ -1,5 +1,3 @@
-'use client'
-
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { X, Mail, Server, Users, UserPlus2, MessageCircle, AlertCircle, Bell } from 'lucide-react'
@@ -11,7 +9,6 @@ import { Server as ServerType } from '@/lib/mockData'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-
 
 interface ServerInvite {
   id: string
@@ -104,7 +101,8 @@ export default function InboxModal({ isOpen, onClose }: InboxModalProps) {
       name: invite.serverName,
       imageUrl: invite.serverIcon,
       members: [],
-      channels: []
+      channels: [],
+      roles: [] // Añadido campo `roles`
     };
     addServer(newServer);
     setInvites(prev => prev.filter(inv => inv.id !== invite.id));
@@ -345,4 +343,3 @@ export default function InboxModal({ isOpen, onClose }: InboxModalProps) {
 
   return createPortal(content, document.body)
 }
-

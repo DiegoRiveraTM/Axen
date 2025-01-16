@@ -3,16 +3,19 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
-import { DotsBackground } from '@/components/dots-background'
-import { MinimalInput } from '@/components/minimal-input'
-import { ThemeToggle } from '@/components/theme-toggle'
+import { DotsBackground } from '@/components/dots-background';
+import { MinimalInput } from '@/components/minimal-input';
+import { ThemeToggle } from '@/components/theme-toggle';
+import { MinimalSelect } from '@/components/minimal-select';
+
+
 
 export default function RegisterPage() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     // Handle registration
   }
@@ -40,7 +43,7 @@ export default function RegisterPage() {
             label="Name"
             type="text"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
             required
           />
 
@@ -48,7 +51,7 @@ export default function RegisterPage() {
             label="Email Address"
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
             required
           />
 
@@ -56,7 +59,7 @@ export default function RegisterPage() {
             label="Password"
             type="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
             required
           />
 
@@ -83,4 +86,3 @@ export default function RegisterPage() {
     </main>
   )
 }
-

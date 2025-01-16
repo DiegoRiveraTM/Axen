@@ -59,7 +59,7 @@ export default function MembersView({ server }: MembersViewProps) {
   const [isComboBoxOpen, setIsComboBoxOpen] = useState(false)
   const comboBoxRef = useRef<HTMLDivElement>(null)
 
-  const filteredMembers = members.filter(member => 
+  const filteredMembers = server.members.filter(member => 
     member.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
     (selectedRole === 'all' || member.role === roles.find(r => r.id === selectedRole)?.name)
   )

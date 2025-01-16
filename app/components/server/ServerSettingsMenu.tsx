@@ -1,22 +1,24 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Settings, UserPlus, PlusCircle, LogOut } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import ServerSettings from './settings/ServerSettings'
 import AddFriendModal from './AddFriendModal'
 import CreateChannelModal from './CreateChannelModal'
 import LeaveServerModal from './modals/LeaveServerModal'
+import { Channel, Role, Member } from '@/lib/mockData'
 
 interface ServerSettingsMenuProps {
   isOpen: boolean
   onClose: () => void
   serverName: string
   serverImage: string
-  onCreateChannel: (channelName: string, channelType: 'voice' | 'text', category: string) => void
+  onCreateChannel: (channelName: string, channelType: 'voice' | 'text', category?: string) => void
+  currentUserId: string  // Agrega esta propiedad
 }
 
-export default function ServerSettingsMenu({ isOpen, onClose, serverName, serverImage, onCreateChannel }: ServerSettingsMenuProps) {
+export default function ServerSettingsMenu({ isOpen, onClose, serverName, serverImage, onCreateChannel, currentUserId }: ServerSettingsMenuProps) {
   const router = useRouter()
   const [showSettings, setShowSettings] = useState(false)
   const [showAddFriend, setShowAddFriend] = useState(false)
@@ -33,10 +35,10 @@ export default function ServerSettingsMenu({ isOpen, onClose, serverName, server
   }
 
   const handleLeaveServer = async () => {
-    // Here you would implement the actual server leaving logic
-    // For now, we'll just simulate it with a delay
+    // Aquí se implementaría la lógica real para abandonar el servidor
+    // Por ahora, simularemos con un retraso
     await new Promise(resolve => setTimeout(resolve, 1000))
-    router.push('/') // Redirect to home page after leaving
+    router.push('/') // Redirigir a la página de inicio después de abandonar
   }
 
   return (
@@ -90,8 +92,13 @@ export default function ServerSettingsMenu({ isOpen, onClose, serverName, server
             name: serverName,
             icon: serverImage,
             banner: '/images/server-banner.jpg',
-            message: 'Welcome to our server!'
+            message: 'Welcome to our server!',
+            channels: [], // Agrega las propiedades faltantes
+            roles: [],    // Agrega las propiedades faltantes
+            id: '1',      // Agrega las propiedades faltantes
+            members: []   // Agrega las propiedades faltantes
           }}
+          currentUserId={currentUserId}  // Pasa la propiedad currentUserId aquí
         />
       )}
 
@@ -115,4 +122,3 @@ export default function ServerSettingsMenu({ isOpen, onClose, serverName, server
     </>
   )
 }
-

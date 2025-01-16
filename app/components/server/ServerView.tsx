@@ -12,7 +12,7 @@ import ServerBar from '../layout/ServerBar'
 import UserStatus from '../layout/UserStatus'
 import ServerSettings from './settings/ServerSettings'
 import SearchModal from './SearchModal'
-import { Server, Message, Channel } from '@/lib/mockData'
+import { Server, Message, Channel, Role, Member } from '@/lib/mockData'
 import MessageNotification from '../chat/MessageNotification'
 import * as api from '@/lib/api';
 
@@ -28,7 +28,10 @@ export default function ServerView({
     name: 'Tecmi Group',
     imageUrl: '/images/server-icon.png',
     members: [],
-    channels: []  
+    channels: [],
+    roles: [], 
+    banner: '/images/default-banner.jpg', 
+    message: 'Welcome to our server!' 
   }, 
   initialMessages = [],
   currentUserId
@@ -109,10 +112,10 @@ export default function ServerView({
     }
   }
 
-  const handleCreateChannel = async (channelName: string, channelType: 'voice' | 'text', category: string) => {
+  const handleCreateChannel = async (channelName: string, channelType: 'voice' | 'text', category?: string) => {
     if (currentServer) {
       try {
-        const response = await api.createChannel(currentServer.id, { name: channelName, type: channelType, category });
+        const response = await api.createChannel(currentServer.id, { name: channelName, type: channelType, category: category || '' });
         const newChannel = response.data;
         setChannels(prevChannels => [...prevChannels, newChannel]);
       } catch (error) {
@@ -183,6 +186,8 @@ export default function ServerView({
               ))
             }}
             onOpenSettings={() => setShowSettings(true)}
+            currentUserId={currentUserId}  // Pasa la propiedad currentUserId aquí
+            serverId={serverData.id} // Pasa la propiedad serverId aquí
           />
         </div>
         <div className={`absolute inset-0 transition-all duration-300 ease-in-out bg-[#1B3726] ${
@@ -244,10 +249,13 @@ export default function ServerView({
             icon: serverData.imageUrl,
             banner: serverData.banner || '/images/default-banner.jpg',
             message: serverData.message,
-            channels: channels
+            channels: channels,
+            roles: serverData.roles, // Agrega la propiedad roles
+            id: serverData.id, // Agrega la propiedad id
+            members: serverData.members // Agrega la propiedad members
           }}
           onUpdateServer={handleUpdateServer}
-          onCreateChannel={handleCreateChannel}
+          onCreateChannel={(channel) => handleCreateChannel(channel.name, channel.type, channel.category)} // Corrige la firma aquí
           currentUserId={currentUserId}
         />
       )}

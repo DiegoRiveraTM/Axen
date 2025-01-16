@@ -33,7 +33,7 @@ interface Friend {
 
 export default function FriendsList() {
   const { toast } = useToast()
-  const [friends, setFriends] = useState([]);
+  const [friends, setFriends] = useState<Friend[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [friendToDelete, setFriendToDelete] = useState<Friend | null>(null)
@@ -59,17 +59,8 @@ export default function FriendsList() {
     navigator.clipboard.writeText(inviteLink).then(() => {
       toast({
         className: "bg-[#1B3726] border border-green-500/20 text-white",
-        title: (
-          <div className="flex items-center gap-2 text-green-400 font-medium">
-            <Link size={18} />
-            Invite Link Copied!
-          </div>
-        ),
-        description: (
-          <p className="text-gray-300 mt-1">
-            The invite link has been copied to your clipboard
-          </p>
-        ),
+        title: "Invite Link Copied!",
+        description: "The invite link has been copied to your clipboard",
         action: (
           <ToastAction altText="Close" className="border border-green-500/20 hover:bg-green-500/10 text-green-400">
             Close
@@ -84,17 +75,8 @@ export default function FriendsList() {
       await api.sendFriendRequest(username);
       toast({
         className: "bg-[#1B3726] border border-green-500/20 text-white",
-        title: (
-          <div className="flex items-center gap-2 text-green-400 font-medium">
-            <UserPlus size={18} />
-            Friend Request Sent
-          </div>
-        ),
-        description: (
-          <p className="text-gray-300 mt-1">
-            A friend request has been sent to <span className="text-white font-medium">{username}</span>
-          </p>
-        ),
+        title: "Friend Request Sent",
+        description: `A friend request has been sent to ${username}`,
         action: (
           <ToastAction altText="Close" className="border border-green-500/20 hover:bg-green-500/10 text-green-400">
             Close
@@ -219,6 +201,11 @@ export default function FriendsList() {
     }
   };
 
+  const confirmDeleteFriend = () => {
+    if (friendToDelete) {
+      handleDeleteFriend(friendToDelete);
+    }
+  };
 
   return (
     <>
@@ -302,7 +289,7 @@ export default function FriendsList() {
                   className="opacity-0 group-hover:opacity-100 transition-opacity ml-2 flex-shrink-0"
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleDeleteFriend(friend);
+                    setFriendToDelete(friend);
                   }}
                 >
                   <Trash2 className="h-4 w-4 text-red-500" />
@@ -320,7 +307,7 @@ export default function FriendsList() {
         )}
       </div>
 
-      <AlertDialog open={!!friendToDelete} onOpenChange={setFriendToDelete}>
+      <AlertDialog open={!!friendToDelete} onOpenChange={(open) => setFriendToDelete(open ? friendToDelete : null)}>
         <AlertDialogContent className="bg-[#1B3726] border-[#2A633B] text-white">
           <AlertDialogHeader>
             <AlertDialogTitle>¿Eliminar amigo?</AlertDialogTitle>

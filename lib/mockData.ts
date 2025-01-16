@@ -1,9 +1,10 @@
 export interface Member {
   id: string;
+  roles: string[];
   name: string;
   imageUrl: string;
   isOnline: boolean;
-  roles: string[];
+  role: string;  // Asegúrate de que esta propiedad sea siempre una cadena
 }
 
 export interface Role {
@@ -23,7 +24,7 @@ export type Permission =
   | 'MENTION_EVERYONE'
   | 'ATTACH_FILES'
   | 'VIEW_CHANNELS'
-  | 'MANAGE_EVENTS'; // Added new permission type
+  | 'MANAGE_EVENTS';
 
 export interface Message {
   id: string;
@@ -31,6 +32,7 @@ export interface Message {
   timestamp: string;
   userId: string;
   channelId: string;
+  image?: string;
 }
 
 export interface Channel {
@@ -56,6 +58,8 @@ export interface Server {
   members: Member[];
   channels: Channel[];
   roles: Role[];
+  banner: string;  // Agrega la propiedad banner aquí
+  message?: string;  // Agrega la propiedad message aquí
 }
 
 // Mock data
@@ -86,21 +90,24 @@ const members: Member[] = [
     name: 'John Doe',
     imageUrl: '/images/user-avatar.jpg',
     isOnline: true,
-    roles: ['1']
+    roles: ['1'],
+    role: 'Admin'
   },
   {
     id: '2',
     name: 'Jane Smith',
     imageUrl: '/images/user-avatar.jpg',
     isOnline: false,
-    roles: ['2']
+    roles: ['2'],
+    role: 'Moderator'
   },
   {
     id: '3',
     name: 'Bob Johnson',
     imageUrl: '/images/user-avatar.jpg',
     isOnline: true,
-    roles: ['3']
+    roles: ['3'],
+    role: 'Member'
   },
 ];
 
@@ -135,6 +142,8 @@ let servers: { [key: string]: Server } = {
     members: members,
     channels: channels,
     roles: roles,
+    banner: '/images/default-banner.jpg',
+    message: 'Welcome to our server!'
   },
 };
 
@@ -171,4 +180,3 @@ export function hasPermission(member: Member, permission: Permission, serverId: 
 export function addServer(server: Server) {
   servers[server.id] = server;
 }
-

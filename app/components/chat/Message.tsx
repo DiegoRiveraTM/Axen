@@ -27,11 +27,17 @@ interface Reaction {
   userReacted: boolean;
 }
 
+interface ReactionsRecord {
+  [messageId: string]: {
+    [emoji: string]: Reaction;
+  };
+}
+
 const EMOJI_LIST = ['😊', '😂', '🤔', '👍', '❤️', '🎉', '🔥', '👀', '🙌', '💯']
 
 const Message: FC<MessageProps> = ({ username, messages, userImage, isNew, highlightText, onReply }) => {
   const [showActions, setShowActions] = useState(false)
-  const [reactions, setReactions] = useState<Record<string, Reaction>>({})
+  const [reactions, setReactions] = useState<ReactionsRecord>({})
   const [contextMenuPos, setContextMenuPos] = useState<{ x: number; y: number } | null>(null);
   const contextMenuRef = useRef<HTMLDivElement>(null);
   const [isReported, setIsReported] = useState(false);
@@ -89,8 +95,7 @@ const Message: FC<MessageProps> = ({ username, messages, userImage, isNew, highl
     setContextMenuPos({ x: e.clientX, y: e.clientY });
   };
 
-  const handleReportMessage = (messageId?: string) => {
-    // Add messageId to the report function if needed
+  const handleReportMessage = () => {
     setShowReportModal(true);
   };
 
@@ -146,8 +151,8 @@ const Message: FC<MessageProps> = ({ username, messages, userImage, isNew, highl
           <span className="text-xs text-gray-400/60">{messages[0].timestamp}</span>
         </div>
         <div className="space-y-1">
-          {messages.map((message, index) => (
-            <div key={message.id} className="group/message relative pl-6"> {/* Changed pl-24 to pl-6 for less spacing */}
+          {messages.map((message) => (
+            <div key={message.id} className="group/message relative pl-6">
               <div className="absolute left-0 top-1/2 -translate-y-1/2 opacity-0 group-hover/message:opacity-100 transition-opacity">
                 <Popover>
                   <PopoverTrigger asChild>
@@ -216,8 +221,6 @@ const Message: FC<MessageProps> = ({ username, messages, userImage, isNew, highl
             </div>
           ))}
         </div>
-
-
       </div>
 
       {showReportModal && (
@@ -280,7 +283,7 @@ const Message: FC<MessageProps> = ({ username, messages, userImage, isNew, highl
             </PopoverContent>
           </Popover>
           <button 
-            onClick={handleReply}
+            onClick={() => handleReply(messages[0].id)}
             className="text-white/60 hover:text-white transition-colors"
           >
             <Reply size={16} />

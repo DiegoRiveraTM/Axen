@@ -1,7 +1,7 @@
 'use client'
 
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react'
-import { Server, Channel } from '@/lib/mockData'
+import { Server, Channel, Role } from '@/lib/mockData'
 import * as api from '@/lib/api'
 
 interface Friend {
@@ -54,12 +54,46 @@ export function AppProvider({ children }: { children: ReactNode }) {
     name: 'BoboCrypto', 
     imageUrl: '/images/server-icon.png',
     members: [],
-    channels: []
+    channels: [],
+    roles: [], // Añade roles aquí
+    banner: '/images/default-banner.jpg' // Añade banner aquí
   },
-  { id: '2', name: 'Server 2', imageUrl: '/images/default-server-icon.png', members: [], channels: [] },
-  { id: '3', name: 'Server 3', imageUrl: '/images/default-server-icon.png', members: [], channels: [] },
-  { id: '4', name: 'Server 4', imageUrl: '/images/default-server-icon.png', members: [], channels: [] },
-  { id: '5', name: 'Landscape', imageUrl: '/images/landscape-server.jpg', members: [], channels: [] }
+  { 
+    id: '2', 
+    name: 'Server 2', 
+    imageUrl: '/images/default-server-icon.png', 
+    members: [], 
+    channels: [], 
+    roles: [], 
+    banner: '/images/default-banner.jpg'
+  },
+  { 
+    id: '3', 
+    name: 'Server 3', 
+    imageUrl: '/images/default-server-icon.png', 
+    members: [], 
+    channels: [], 
+    roles: [], 
+    banner: '/images/default-banner.jpg'
+  },
+  { 
+    id: '4', 
+    name: 'Server 4', 
+    imageUrl: '/images/default-server-icon.png', 
+    members: [], 
+    channels: [], 
+    roles: [], 
+    banner: '/images/default-banner.jpg'
+  },
+  { 
+    id: '5', 
+    name: 'Landscape', 
+    imageUrl: '/images/landscape-server.jpg', 
+    members: [], 
+    channels: [], 
+    roles: [], 
+    banner: '/images/default-banner.jpg'
+  } 
 ])
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);

@@ -15,6 +15,12 @@ interface MessageListProps {
   onReply: (messageId: string) => void;
 }
 
+interface Match {
+  text: string;
+  index: number;
+  used?: boolean; // Añadido campo `used`
+}
+
 const MessageList: FC<MessageListProps> = ({ messages, serverId, searchQuery, onSearch, onClearSearch, onReply }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -22,7 +28,7 @@ const MessageList: FC<MessageListProps> = ({ messages, serverId, searchQuery, on
   const [currentMatchIndex, setCurrentMatchIndex] = useState(0)
   const [totalMatches, setTotalMatches] = useState(0)
   const matchRefs = useRef<(HTMLSpanElement | null)[]>([]);
-  const [allMatches, setAllMatches] = useState<Array<{ text: string; index: number }>>([]);
+  const [allMatches, setAllMatches] = useState<Match[]>([]); // Usamos la nueva interfaz `Match`
 
   useEffect(() => {
     const container = containerRef.current
@@ -47,7 +53,7 @@ const MessageList: FC<MessageListProps> = ({ messages, serverId, searchQuery, on
   useEffect(() => {
     if (searchQuery) {
       // Reset matches
-      const newMatches: Array<{ text: string; index: number }> = [];
+      const newMatches: Match[] = [];
       let matchCount = 0;
 
       messages.forEach(msg => {

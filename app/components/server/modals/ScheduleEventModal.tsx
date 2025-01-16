@@ -9,7 +9,7 @@ interface Event {
   title: string
   date: string
   time: string
-  createdBy?: string
+  createdBy: string
 }
 
 interface ScheduleEventModalProps {
@@ -40,7 +40,7 @@ export default function ScheduleEventModal({
     e.preventDefault()
     if (!canManageEvents) return
     
-    onAddEvent({ title, date, time })
+    onAddEvent({ title, date, time, createdBy: '' }) // Aseguramos que createdBy no sea undefined
     setTitle('')
     setDate('')
     setTime('')
@@ -181,4 +181,3 @@ export default function ScheduleEventModal({
 
   return createPortal(content, document.body)
 }
-

@@ -216,7 +216,7 @@ export default function RolesView({
                     exit={{ opacity: 0, height: 0 }}
                     transition={{ duration: 0.3 }}
                   >
-                    {(Object.entries(permissionCategories) as [keyof typeof permissionCategories, Permission[]][]).map(([category, permissions]) => {
+                    {(Object.entries(permissionCategories) as unknown as [keyof typeof permissionCategories, Permission[]][]).map(([category, permissions]) => {
                       const CategoryIcon = categoryIcons[category]
                       return (
                         <div key={category} className="px-4 py-3 border-t border-[#2A633B]/30">
